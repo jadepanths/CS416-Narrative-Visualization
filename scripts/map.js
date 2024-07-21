@@ -13,8 +13,8 @@ const projection = d3.geoMercator()
 const path = d3.geoPath()
     .projection(projection);
 
-const colorScale = d3.scaleSequential(d3.interpolateReds)
-    .domain([-10, 30]); // Adjust domain based on your temperature data range
+const colorScale = d3.scaleSequential(d3.interpolateRdYlBu)
+    .domain([0, 10, 20, 30, 40, 50]); // Adjust domain based on your temperature data range
 
 Promise.all([
     d3.json("data/custom.geo.json"),

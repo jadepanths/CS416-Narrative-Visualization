@@ -13,8 +13,21 @@ const projection = d3.geoMercator()
 const path = d3.geoPath()
     .projection(projection);
 
-const colorScale = d3.scaleSequential(d3.interpolateRdYlBu)
-    .domain([0, 10, 20, 30, 40, 50]); // Adjust domain based on your temperature data range
+// Use the calculated temperature range from your Python script
+// -22.616°C to 30.74475°C
+const minTemp = -22.616; // Replace with actual minTemp
+const maxTemp = 30.74475; // Replace with actual maxTemp
+
+// Define a color scale with a diverging scheme from blue (cold) to red (hot)
+const colorScale = d3.scaleSequential()
+    .interpolator(d3.interpolateRdYlBu)
+    .domain([maxTemp, minTemp]);  // Inverted domain to ensure blue is cold and red is hot
+
+// Country name mapping (add more mappings as needed)
+const countryNameMapping = {
+    "United States": "United States of America",
+    // Add other mappings if necessary
+};
 
 Promise.all([
     d3.json("data/custom.geo.json"),
@@ -51,7 +64,9 @@ Promise.all([
 
         const countryTemp = {};
         yearData.forEach(d => {
-            countryTemp[d.Country] = d.AverageTemperature;
+            // Use the mapping to get the correct country name
+            const countryName = countryNameMapping[d.Country] || d.Country;
+            countryTemp[countryName] = d.AverageTemperature;
         });
 
         svg.selectAll(".country")

@@ -15,8 +15,8 @@ const path = d3.geoPath()
 
 // Use the calculated temperature range from your Python script
 // -22.616°C to 30.74475°C
-const minTemp = -22.616; // Replace with actual minTemp
-const maxTemp = 30.74475; // Replace with actual maxTemp
+const minTemp = -22.616; 
+const maxTemp = 30.74475; 
 
 // Define a color scale with a diverging scheme from blue (cold) to red (hot)
 const colorScale = d3.scaleSequential()
@@ -26,7 +26,20 @@ const colorScale = d3.scaleSequential()
 // Country name mapping (add more mappings as needed)
 const countryNameMapping = {
     "United States": "United States of America",
-    // Add other mappings if necessary
+    "Czech Republic": "Czechia",
+    "Bosnia And Herzegovina": "Bosnia and Herz.",
+    "Burma": "Myanmar",
+    "Congo (Democratic Republic Of The)": "Dem. Rep. Congo",
+    "Central African Republic": "Central African Rep.",
+    "Côte D'Ivoire": "Côte d'Ivoire",
+    "Falkland Islands (Islas Malvinas)": "Falkland Is.",
+    "Macedonia": "North Macedonia",
+    "Dominican Republic": "Dominican Rep.",
+    "Trinidad And Tobago": "Trinidad and Tobago",
+    "Guinea Bissau": "Guinea-Bissau",
+    "Equatorial Guinea": "Eq. Guinea",
+    "Timor Leste": "Timor-Leste",
+    "Solomon Islands": "Solomon Is."
 };
 
 Promise.all([

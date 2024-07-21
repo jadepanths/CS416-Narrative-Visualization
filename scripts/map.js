@@ -99,6 +99,7 @@ Promise.all([
 
     function updateMap(year) {
         d3.select("#yearDisplay").text(year);
+        d3.select("#yearRange").property("value", year);
 
         const yearData = temperatureData.filter(d => d.Year === year);
 

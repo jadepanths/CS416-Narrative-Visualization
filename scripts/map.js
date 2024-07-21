@@ -1,6 +1,8 @@
 const width = 960;
 const height = 600;
 let currentYear = 1750;
+let playing = false;
+let playInterval;
 
 const svg = d3.select("#map-container").append("svg")
     .attr("width", width)
@@ -68,6 +70,31 @@ Promise.all([
     d3.select("#nextYear").on("click", () => {
         currentYear = Math.min(currentYear + 1, d3.max(temperatureData, d => d.Year));
         updateMap(currentYear);
+    });
+
+    d3.select("#yearRange").on("input", function() {
+        currentYear = +this.value;
+        updateMap(currentYear);
+    });
+
+    d3.select("#playPause").on("click", () => {
+        playing = !playing;
+        if (playing) {
+            d3.select("#playPause").text("Pause");
+            playInterval = setInterval(() => {
+                if (currentYear < 2013) {
+                    currentYear++;
+                    updateMap(currentYear);
+                } else {
+                    clearInterval(playInterval);
+                    playing = false;
+                    d3.select("#playPause").text("Play");
+                }
+            }, 100);
+        } else {
+            clearInterval(playInterval);
+            d3.select("#playPause").text("Play");
+        }
     });
 
     function updateMap(year) {

@@ -1,0 +1,17 @@
+#map-container {
+    margin-bottom: 20px;
+}
+
+#color-bar {
+    margin: 10px 0;
+}
+
+#annotations {
+    margin: 10px 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#controls {
+    margin: 10px 0;
+}

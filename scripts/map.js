@@ -61,14 +61,15 @@ Promise.all([
         .attr("class", "country");
 
     updateMap(currentYear);
+    createColorBar();
 
     d3.select("#prevYear").on("click", () => {
-        currentYear = Math.max(currentYear - 1, d3.min(temperatureData, d => d.Year));
+        currentYear = Math.max(currentYear - 1, 1750);
         updateMap(currentYear);
     });
 
     d3.select("#nextYear").on("click", () => {
-        currentYear = Math.min(currentYear + 1, d3.max(temperatureData, d => d.Year));
+        currentYear = Math.min(currentYear + 1, 2013);
         updateMap(currentYear);
     });
 
@@ -115,7 +116,61 @@ Promise.all([
                 const temp = countryTemp[d.properties.name];
                 return temp != null ? colorScale(temp) : "#ccc";
             });
+
+        updateAnnotations(year);
     }
+
+    function createColorBar() {
+        const colorBar = d3.select("#color-bar").append("svg")
+            .attr("width", 300)
+            .attr("height", 50);
+
+        const gradient = colorBar.append("defs").append("linearGradient")
+            .attr("id", "gradient")
+            .attr("x1", "0%")
+            .attr("x2", "100%")
+            .attr("y1", "0%")
+            .attr("y2", "0%");
+
+        gradient.append("stop")
+            .attr("offset", "0%")
+            .attr("style", "stop-color:" + d3.interpolateRdYlBu(0) + ";stop-opacity:1");
+
+        gradient.append("stop")
+            .attr("offset", "100%")
+            .attr("style", "stop-color:" + d3.interpolateRdYlBu(1) + ";stop-opacity:1");
+
+        colorBar.append("rect")
+            .attr("width", 300)
+            .attr("height", 20)
+            .style("fill", "url(#gradient)");
+
+        colorBar.append("text")
+            .attr("x", 0)
+            .attr("y", 35)
+            .attr("fill", "#000")
+            .text(minTemp + "°C");
+
+        colorBar.append("text")
+            .attr("x", 280)
+            .attr("y", 35)
+            .attr("fill", "#000")
+            .text(maxTemp + "°C");
+    }
+
+    function updateAnnotations(year) {
+        d3.select("#annotations").html(""); // Clear existing annotations
+
+        // Example annotations
+        if (year === 1750) {
+            d3.select("#annotations").append("div").text("Start of the Industrial Revolution.");
+        } else if (year === 1883) {
+            d3.select("#annotations").append("div").text("Krakatoa volcanic eruption.");
+        } else if (year === 2020) {
+            d3.select("#annotations").append("div").text("Significant increase in global temperature.");
+        }
+    }
+
 }).catch(error => {
     console.error('Error loading data:', error);
 });

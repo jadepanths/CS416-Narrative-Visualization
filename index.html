@@ -10,9 +10,11 @@
 </head>
 <body>
     <h1>Global Climate Change Visualization</h1>
-    <div id="map-container"></div>
+    <div id="main-container" style="width: 100%; overflow: hidden;">
+        <div id="map-container" style="width: 70%; float: left;"></div>
+        <div id="annotations" style="width: 28%; margin-left: 70%;"></div>
+    </div>
     <div id="color-bar"></div>
-    <div id="annotations"></div>
     <div id="controls">
         <button id="prevYear">Previous Year</button>
         <input type="range" id="yearRange" min="1750" max="2013" step="1" value="1750">

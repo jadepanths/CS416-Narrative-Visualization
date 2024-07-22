@@ -169,7 +169,7 @@ Promise.all([
             .text(maxTemp + "°C");
 
         colorBar.append("text")
-            .attr("x", 280)
+            .attr("x", 229)
             .attr("y", 35)
             .attr("fill", "#000")
             .text(minTemp + "°C");
@@ -183,7 +183,7 @@ Promise.all([
 
         // Display annotations
         currentAnnotations.forEach(a => {
-            d3.select("#annotations").append("div").text(`${a.text} (${a.year})`);
+            d3.select("#annotations").append("div").attr("id", "text").text(`${a.text} (${a.year})`);
         });
     }
 

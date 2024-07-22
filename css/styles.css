@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+#main-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+#map-container {
+    width: 70%;
+    float: left;
+}
+
+#annotations {
+    width: 28%;
+    margin-left: 70%;
+    
+}
+
+#annotations div {
+    font-size: 15px;
+    color: ble;
+}
+
+#color-bar {
+    width: 100%;
+    max-width: 900px;
+    margin: 10px 0;
+}
+
+#controls {
+    width: 100%;
+    max-width: 900px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+#controls button {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+#controls input[type="range"] {
+    margin: 0 10px;
+    flex: 1;
+}
+
+#controls button:hover {
+    color: green;
+    background-color: yellow;
+}

@@ -44,6 +44,13 @@ const countryNameMapping = {
     "Solomon Islands": "Solomon Is."
 };
 
+// List of annotations
+const annotations = [
+    { year: 1750, text: "Start of the Industrial Revolution" },
+    { year: 1883, text: "Krakatoa volcanic eruption" },
+    { year: 2020, text: "Significant increase in global temperature" }
+];
+
 Promise.all([
     d3.json("data/custom.geo.json"),
     d3.csv("data/YearlyAverageTemperaturesByCountry.csv")
@@ -125,50 +132,48 @@ Promise.all([
             .attr("width", 300)
             .attr("height", 50);
 
-        const gradient = colorBar.append("defs").append("linearGradient")
-            .attr("id", "gradient")
-            .attr("x1", "0%")
-            .attr("x2", "100%")
-            .attr("y1", "0%")
-            .attr("y2", "0%");
+        const defs = colorBar.append("defs");
 
-        gradient.append("stop")
-            .attr("offset", "0%")
-            .attr("style", "stop-color:" + d3.interpolateRdYlBu(0) + ";stop-opacity:1");
+        const linearGradient = defs.append("linearGradient")
+            .attr("id", "linear-gradient");
 
-        gradient.append("stop")
-            .attr("offset", "100%")
-            .attr("style", "stop-color:" + d3.interpolateRdYlBu(1) + ";stop-opacity:1");
+        linearGradient.selectAll("stop")
+            .data(colorScale.ticks().map((t, i, n) => ({
+                offset: `${100 * i / n.length}%`,
+                color: colorScale(t)
+            })))
+            .enter().append("stop")
+            .attr("offset", d => d.offset)
+            .attr("stop-color", d => d.color);
 
         colorBar.append("rect")
             .attr("width", 300)
             .attr("height", 20)
-            .style("fill", "url(#gradient)");
+            .style("fill", "url(#linear-gradient)");
 
         colorBar.append("text")
             .attr("x", 0)
             .attr("y", 35)
             .attr("fill", "#000")
-            .text(minTemp + "°C");
+            .text(maxTemp + "°C");
 
         colorBar.append("text")
             .attr("x", 280)
             .attr("y", 35)
             .attr("fill", "#000")
-            .text(maxTemp + "°C");
+            .text(minTemp + "°C");
     }
 
     function updateAnnotations(year) {
         d3.select("#annotations").html(""); // Clear existing annotations
 
-        // Example annotations
-        if (year === 1750) {
-            d3.select("#annotations").append("div").text("Start of the Industrial Revolution.");
-        } else if (year === 1883) {
-            d3.select("#annotations").append("div").text("Krakatoa volcanic eruption.");
-        } else if (year === 2020) {
-            d3.select("#annotations").append("div").text("Significant increase in global temperature.");
-        }
+        // Filter annotations up to the current year
+        const currentAnnotations = annotations.filter(a => a.year <= year);
+
+        // Display annotations
+        currentAnnotations.forEach(a => {
+            d3.select("#annotations").append("div").text(`${a.text} (${a.year})`);
+        });
     }
 
 }).catch(error => {

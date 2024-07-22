@@ -46,9 +46,20 @@ const countryNameMapping = {
 
 // List of annotations
 const annotations = [
-    { year: 1750, text: "Start of the Industrial Revolution" },
-    { year: 1883, text: "Krakatoa volcanic eruption" },
-    { year: 2020, text: "Significant increase in global temperature" }
+    { year: 1760, text: "First Industrial Revolution (1760-1840)" },
+    { year: 1824, text: "Fourier's Greenhouse Effect Theory"},
+    { year: 1859, text: "Oil Industry Begins" },
+    { year: 1864, text: "George Perkins Marsh's Man and Nature" },
+    { year: 1870, text: "Second Industrial Revolution" },
+    { year: 1945, text: "End of World War II (Post-war industrialization and population boom )" },
+    { year: 1958, text: "Keeling Curve (systematic measurements of atmospheric CO2)"},
+    { year: 1970, text: "First Earth Day" },
+    { year: 1979, text: "First World Climate Conference" },
+    { year: 1987, text: "Montreal Protocol" },
+    { year: 1988, text: "Intergovernmental Panel on Climate Change (IPCC) Established" },
+    { year: 1992, text: "United Nations Framework Convention on Climate Change (UNFCCC)" },
+    { year: 1997, text: "Kyoto Protocol" },
+    { year: 2013, text: "IPCC Fifth Assessment Report" },
 ];
 
 Promise.all([

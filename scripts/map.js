@@ -1,5 +1,6 @@
 const width = 960;
 const height = 600;
+const lineGraphHeight = 300;
 let currentYear = 1750;
 let playing = false;
 let playInterval;
@@ -7,6 +8,10 @@ let playInterval;
 const svg = d3.select("#map-container").append("svg")
     .attr("width", width)
     .attr("height", height);
+
+const lineGraphSvg = d3.select("#line-graph")
+    .attr("width", width)
+    .attr("height", lineGraphHeight);
 
 const projection = d3.geoMercator()
     .scale(150)
@@ -22,7 +27,7 @@ const maxTemp = 30.74475;
 // Define a color scale with a diverging scheme from blue (cold) to red (hot)
 const colorScale = d3.scaleSequential()
     .interpolator(d3.interpolateRdYlBu)
-    .domain([maxTemp, minTemp]);  // Inverted domain to ensure blue is cold and red is hot
+    .domain([maxTemp, minTemp]);  // Domain adjusted to ensure blue is cold and red is hot
 
 // Country name mapping (add more mappings as needed)
 const countryNameMapping = {
@@ -65,29 +70,83 @@ const tooltip = d3.select("#tooltip");
 
 Promise.all([
     d3.json("data/custom.geo.json"),
-    d3.csv("data/YearlyAverageTemperaturesByCountry.csv")
-]).then(([geojson, temperatureData]) => {
+    d3.csv("data/YearlyAverageTemperaturesByCountry.csv"),
+    d3.csv("data/GlobalYearlyAverageTemperatures.csv")
+]).then(([geojson, temperatureData, globalTemperatureData]) => {
     temperatureData.forEach(d => {
         d.Year = +d.Year;
         d.AverageTemperature = +d.AverageTemperature;
     });
 
+    globalTemperatureData.forEach(d => {
+        d.Year = +d.Year;
+        d.AverageTemperature = +d.AverageTemperature;
+        d.AverageTemperatureUncertainty = +d.AverageTemperatureUncertainty;
+        d.UpperBound = d.AverageTemperature + d.AverageTemperatureUncertainty;
+        d.LowerBound = d.AverageTemperature - d.AverageTemperatureUncertainty;
+    });
+
+    const xScale = d3.scaleLinear()
+        .domain([1750, 2013])
+        .range([0, width]);
+
+    const yScale = d3.scaleLinear()
+        .domain([
+            d3.min(globalTemperatureData, d => d.LowerBound),
+            d3.max(globalTemperatureData, d => d.UpperBound)
+        ])
+        .range([lineGraphHeight, 0]);
+
+    const line = d3.line()
+        .x(d => xScale(d.Year))
+        .y(d => yScale(d.AverageTemperature));
+
+    const area = d3.area()
+        .x(d => xScale(d.Year))
+        .y0(d => yScale(d.LowerBound))
+        .y1(d => yScale(d.UpperBound));
+
+    lineGraphSvg.append("path")
+        .datum(globalTemperatureData)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("class", "temperature-line");
+
+    lineGraphSvg.append("path")
+        .datum(globalTemperatureData)
+        .attr("fill", "lightgray")
+        .attr("class", "uncertainty-area");
+
+    lineGraphSvg.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", `translate(0,${lineGraphHeight})`)
+        .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+    lineGraphSvg.append("g")
+        .attr("class", "y-axis")
+        .call(d3.axisLeft(yScale));
+
     updateMap(currentYear);
+    updateLineGraph(currentYear);
     createColorBar();
 
     d3.select("#prevYear").on("click", () => {
         currentYear = Math.max(currentYear - 1, 1750);
         updateMap(currentYear);
+        updateLineGraph(currentYear);
     });
 
     d3.select("#nextYear").on("click", () => {
         currentYear = Math.min(currentYear + 1, 2013);
         updateMap(currentYear);
+        updateLineGraph(currentYear);
     });
 
     d3.select("#yearRange").on("input", function() {
         currentYear = +this.value;
         updateMap(currentYear);
+        updateLineGraph(currentYear);
     });
 
     d3.select("#playPause").on("click", () => {
@@ -105,6 +164,7 @@ Promise.all([
                 if (currentYear < 2013) {
                     currentYear++;
                     updateMap(currentYear);
+                    updateLineGraph(currentYear);
                 } else {
                     clearInterval(playInterval);
                     playing = false;
@@ -151,6 +211,18 @@ Promise.all([
             });
 
         updateAnnotations(year);
+    }
+
+    function updateLineGraph(year) {
+        const filteredData = globalTemperatureData.filter(d => d.Year <= year);
+
+        lineGraphSvg.select(".temperature-line")
+            .datum(filteredData)
+            .attr("d", line);
+
+        lineGraphSvg.select(".uncertainty-area")
+            .datum(filteredData)
+            .attr("d", area);
     }
 
     function createColorBar() {

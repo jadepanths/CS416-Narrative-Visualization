@@ -97,8 +97,15 @@ Promise.all([
     });
 
     d3.select("#playPause").on("click", () => {
-        playing = !playing;
         if (playing) {
+            // Pause the playback
+            clearInterval(playInterval);
+            d3.select("#playPause").text("Play");
+        } else {
+            // Start or reset the playback
+            if (currentYear === 2013) {
+                currentYear = 1750;
+            }
             d3.select("#playPause").text("Pause");
             playInterval = setInterval(() => {
                 if (currentYear < 2013) {
@@ -110,10 +117,8 @@ Promise.all([
                     d3.select("#playPause").text("Play");
                 }
             }, 100);
-        } else {
-            clearInterval(playInterval);
-            d3.select("#playPause").text("Play");
         }
+        playing = !playing;
     });
 
     function updateMap(year) {

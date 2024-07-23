@@ -51,19 +51,9 @@ const countryNameMapping = {
 // List of annotations
 const annotations = [
     { year: 1760, text: "First Industrial Revolution (1760-1840)" },
-    { year: 1824, text: "Fourier's Greenhouse Effect Theory"},
     { year: 1859, text: "Oil Industry Begins" },
-    { year: 1864, text: "George Perkins Marsh's Man and Nature" },
     { year: 1870, text: "Second Industrial Revolution" },
     { year: 1945, text: "End of World War II (Post-war industrialization and population boom )" },
-    { year: 1958, text: "Keeling Curve (systematic measurements of atmospheric CO2)"},
-    { year: 1970, text: "First Earth Day" },
-    { year: 1979, text: "First World Climate Conference" },
-    { year: 1987, text: "Montreal Protocol" },
-    { year: 1988, text: "Intergovernmental Panel on Climate Change (IPCC) Established" },
-    { year: 1992, text: "United Nations Framework Convention on Climate Change (UNFCCC)" },
-    { year: 1997, text: "Kyoto Protocol" },
-    { year: 2013, text: "IPCC Fifth Assessment Report" },
 ];
 
 const tooltip = d3.select("#tooltip");
@@ -128,11 +118,55 @@ Promise.all([
     lineGraphSvg.append("g")
         .attr("class", "x-axis axis")
         .attr("transform", `translate(0,${lineGraphHeight})`)
-        .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+        .call(d3.axisBottom(xScale).ticks(20).tickFormat(d3.format("d")));
 
     lineGraphSvg.append("g")
         .attr("class", "y-axis axis")
-        .call(d3.axisLeft(yScale));
+        .call(d3.axisLeft(yScale).ticks(10));
+
+    // Add axis titles
+    lineGraphSvg.append("text")
+        .attr("transform", `translate(${width / 2}, ${lineGraphHeight + 40})`)
+        .style("text-anchor", "middle")
+        .text("Year");
+
+    lineGraphSvg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -60)
+        .attr("x", -(lineGraphHeight / 2))
+        .style("text-anchor", "middle")
+        .text("Temperature (°C)");
+
+    // Add legend
+    const legend = lineGraphSvg.append("g")
+        .attr("transform", `translate(${width - 150}, 50)`);  // Move the legend out of the graph area
+
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", "lightgray");
+
+    legend.append("text")
+        .attr("x", 20)
+        .attr("y", 10)
+        .attr("class", "legend")
+        .text("Uncertainty Range");
+
+    legend.append("line")
+        .attr("x1", 0)
+        .attr("y1", 20)
+        .attr("x2", 10)
+        .attr("y2", 20)
+        .attr("stroke", "red")
+        .attr("stroke-width", 1.5);
+
+    legend.append("text")
+        .attr("x", 20)
+        .attr("y", 25)
+        .attr("class", "legend")
+        .text("Average Temperature");
 
     updateMap(currentYear);
     updateLineGraph(currentYear);
@@ -234,6 +268,34 @@ Promise.all([
         lineGraphSvg.select(".average-temperature-line")
             .datum(filteredData)
             .attr("d", line);
+
+        // Add annotations to the line graph using d3-annotation
+        const makeAnnotations = d3.annotation()
+            .type(d3.annotationCallout)
+            .accessors({
+                x: d => xScale(d.year),
+                y: d => yScale(globalTemperatureData.find(g => g.Year === d.year).AverageTemperature)
+            })
+            .annotations(annotations.filter(a => a.year <= year).map(a => {
+                let dx = 50;
+                let dy = 50;
+                if (a.text === "Second Industrial Revolution") {
+                    dx = 100; // Shift this annotation further to the right
+                    dy = 100; // Shift this annotation further down
+                }
+                return {
+                    note: { label: a.text, title: `Year ${a.year}` },
+                    x: xScale(a.year),
+                    y: yScale(globalTemperatureData.find(g => g.Year === a.year).AverageTemperature),
+                    dx: dx,
+                    dy: dy
+                };
+            }));
+
+        lineGraphSvg.selectAll(".annotation-group").remove();
+        lineGraphSvg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
     }
 
     function createColorBar() {

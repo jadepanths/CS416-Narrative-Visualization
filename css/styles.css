@@ -2,8 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    /*background-color: whitesmoke;*/
-    background-color: grey;
+    background-color: lightgray;
 }
 
 #main-container {
@@ -70,6 +69,15 @@ body {
     display: none;
 }
 
+.axis path,
+.axis line {
+    stroke-width: 2px; /* Adjust the thickness of the axis lines */
+}
+
+.tick line {
+    stroke-width: 1.5px; /* Adjust the thickness of the tick lines */
+}
+
 #line-graph-container {
     width: 100%;
     max-width: 900px;
@@ -81,11 +89,14 @@ body {
     height: 300px;
 }
 
-.axis path,
-.axis line {
-    stroke-width: 3px; /* Adjust the thickness of the axis lines */
+.annotation {
+    fill: black;
+    font-size: 12px;
+    font-weight: bold;
 }
 
-.tick line {
-    stroke-width: 1.5px; /* Adjust the thickness of the tick lines */
+.legend {
+    font-size: 12px;
+    font-weight: bold;
+    fill: black;
 }

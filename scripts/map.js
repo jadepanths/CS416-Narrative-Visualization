@@ -118,6 +118,13 @@ Promise.all([
         .attr("fill", "lightgray")
         .attr("class", "uncertainty-area");
 
+    lineGraphSvg.append("path")
+        .datum(globalTemperatureData)
+        .attr("fill", "none")
+        .attr("stroke", "red")
+        .attr("stroke-width", 1.5)
+        .attr("class", "average-temperature-line");
+
     lineGraphSvg.append("g")
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${lineGraphHeight})`)
@@ -223,6 +230,10 @@ Promise.all([
         lineGraphSvg.select(".uncertainty-area")
             .datum(filteredData)
             .attr("d", area);
+
+        lineGraphSvg.select(".average-temperature-line")
+            .datum(filteredData)
+            .attr("d", line);
     }
 
     function createColorBar() {

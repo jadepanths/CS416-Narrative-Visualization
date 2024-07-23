@@ -126,12 +126,12 @@ Promise.all([
         .attr("class", "average-temperature-line");
 
     lineGraphSvg.append("g")
-        .attr("class", "x-axis")
+        .attr("class", "x-axis axis")
         .attr("transform", `translate(0,${lineGraphHeight})`)
         .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
 
     lineGraphSvg.append("g")
-        .attr("class", "y-axis")
+        .attr("class", "y-axis axis")
         .call(d3.axisLeft(yScale));
 
     updateMap(currentYear);

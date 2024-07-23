@@ -16,7 +16,6 @@ const path = d3.geoPath()
     .projection(projection);
 
 // Use the calculated temperature range from your Python script
-// -22.616°C to 30.74475°C
 const minTemp = -22.616; 
 const maxTemp = 30.74475; 
 
@@ -62,6 +61,8 @@ const annotations = [
     { year: 2013, text: "IPCC Fifth Assessment Report" },
 ];
 
+const tooltip = d3.select("#tooltip");
+
 Promise.all([
     d3.json("data/custom.geo.json"),
     d3.csv("data/YearlyAverageTemperaturesByCountry.csv")
@@ -70,13 +71,6 @@ Promise.all([
         d.Year = +d.Year;
         d.AverageTemperature = +d.AverageTemperature;
     });
-
-    svg.append("g")
-        .selectAll("path")
-        .data(geojson.features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr("class", "country");
 
     updateMap(currentYear);
     createColorBar();
@@ -129,15 +123,31 @@ Promise.all([
 
         const countryTemp = {};
         yearData.forEach(d => {
-            // Use the mapping to get the correct country name
             const countryName = countryNameMapping[d.Country] || d.Country;
             countryTemp[countryName] = d.AverageTemperature;
         });
 
         svg.selectAll(".country")
+            .data(geojson.features)
+            .join("path")
+            .attr("d", path)
+            .attr("class", "country")
             .attr("fill", d => {
                 const temp = countryTemp[d.properties.name];
                 return temp != null ? colorScale(temp) : "#ccc";
+            })
+            .on("mouseover", (event, d) => {
+                const countryName = d.properties.name;
+                const temp = countryTemp[countryName];
+                tooltip.classed("hidden", false)
+                    .html(`<strong>${countryName}</strong><br/>Temperature: ${temp != null ? temp.toFixed(2) + "°C" : "No data"}`);
+            })
+            .on("mousemove", (event) => {
+                tooltip.style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.classed("hidden", true);
             });
 
         updateAnnotations(year);
@@ -183,10 +193,8 @@ Promise.all([
     function updateAnnotations(year) {
         d3.select("#annotations").html(""); // Clear existing annotations
 
-        // Filter annotations up to the current year
         const currentAnnotations = annotations.filter(a => a.year <= year);
 
-        // Display annotations
         currentAnnotations.forEach(a => {
             d3.select("#annotations").append("div").attr("id", "text").text(`${a.text} (${a.year})`);
         });

@@ -58,7 +58,6 @@ const countryNameMapping = {
 // List of annotations
 const annotations = [
     { year: 1760, text: "First Industrial Revolution" },
-    { year: 1760, text: "First Industrial Revolution" },
     { year: 1859, text: "Oil Industry Begins" },
     { year: 1870, text: "Second Industrial Revolution" },
     { year: 1945, text: "End of World War II (Post-war industrialization and population boom )" },
@@ -134,7 +133,6 @@ Promise.all([
 
     // Add axis titles
     lineGraphSvg.append("text")
-        .attr("transform", `translate(${width / 2}, ${lineGraphHeight + 30})`) // Adjusted y-position to ensure visibility
         .attr("transform", `translate(${width / 2}, ${lineGraphHeight + 30})`) // Adjusted y-position to ensure visibility
         .style("text-anchor", "middle")
         .text("Year");

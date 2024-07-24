@@ -139,7 +139,7 @@ Promise.all([
 
     // Add legend
     const legend = lineGraphSvg.append("g")
-        .attr("transform", `translate(${width - 150}, 50)`);  // Move the legend out of the graph area
+        .attr("transform", `translate(${width - 210}, 250)`);  // Move the legend out of the graph area
 
     legend.append("rect")
         .attr("x", 0)
@@ -250,8 +250,6 @@ Promise.all([
             .on("mouseout", () => {
                 tooltip.classed("hidden", true);
             });
-
-        updateAnnotations(year);
     }
 
     function updateLineGraph(year) {
@@ -279,9 +277,13 @@ Promise.all([
             .annotations(annotations.filter(a => a.year <= year).map(a => {
                 let dx = 50;
                 let dy = 50;
-                if (a.text === "Second Industrial Revolution") {
-                    dx = 100; // Shift this annotation further to the right
-                    dy = 100; // Shift this annotation further down
+                if (a.text === "Oil Industry Begins") {
+                    dx = -20;
+                    dy = 150;
+                } 
+                else if (a.text === "Second Industrial Revolution") {
+                    dx = 130; 
+                    dy = 80; 
                 }
                 return {
                     note: { label: a.text, title: `Year ${a.year}` },
@@ -333,16 +335,6 @@ Promise.all([
             .attr("y", 35)
             .attr("fill", "#000")
             .text(minTemp + "°C");
-    }
-
-    function updateAnnotations(year) {
-        d3.select("#annotations").html(""); // Clear existing annotations
-
-        const currentAnnotations = annotations.filter(a => a.year <= year);
-
-        currentAnnotations.forEach(a => {
-            d3.select("#annotations").append("div").attr("id", "text").text(`${a.text} (${a.year})`);
-        });
     }
 
 }).catch(error => {

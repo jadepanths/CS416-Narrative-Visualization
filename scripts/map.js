@@ -1,17 +1,22 @@
-const width = 960;
-const height = 600;
-const lineGraphHeight = 300;
+const margin = {top: 20, right: 20, bottom: 50, left: 60};
+const width = 960 - margin.left - margin.right;
+const height = 350 - margin.top - margin.bottom;
+const lineGraphHeight = 300 - margin.top - margin.bottom;
+
 let currentYear = 1750;
 let playing = false;
 let playInterval;
 
 const svg = d3.select("#map-container").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
 
 const lineGraphSvg = d3.select("#line-graph")
-    .attr("width", width)
-    .attr("height", lineGraphHeight);
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const projection = d3.geoMercator()
     .scale(150)
@@ -50,7 +55,7 @@ const countryNameMapping = {
 
 // List of annotations
 const annotations = [
-    { year: 1760, text: "First Industrial Revolution (1760-1840)" },
+    { year: 1760, text: "First Industrial Revolution" },
     { year: 1859, text: "Oil Industry Begins" },
     { year: 1870, text: "Second Industrial Revolution" },
     { year: 1945, text: "End of World War II (Post-war industrialization and population boom )" },
@@ -126,20 +131,20 @@ Promise.all([
 
     // Add axis titles
     lineGraphSvg.append("text")
-        .attr("transform", `translate(${width / 2}, ${lineGraphHeight + 40})`)
+        .attr("transform", `translate(${width / 2}, ${lineGraphHeight + 30})`) // Adjusted y-position to ensure visibility
         .style("text-anchor", "middle")
         .text("Year");
 
     lineGraphSvg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", -60)
+        .attr("y", -25)
         .attr("x", -(lineGraphHeight / 2))
         .style("text-anchor", "middle")
         .text("Temperature (°C)");
 
     // Add legend
     const legend = lineGraphSvg.append("g")
-        .attr("transform", `translate(${width - 210}, 250)`);  // Move the legend out of the graph area
+        .attr("transform", `translate(${width - 150}, 190)`);  // Move the legend out of the graph area
 
     legend.append("rect")
         .attr("x", 0)
@@ -253,7 +258,7 @@ Promise.all([
     }
 
     function updateLineGraph(year) {
-        const filteredData = globalTemperatureData.filter(d => d.Year <= year);
+        const filteredData = globalTemperatureData.filter(d => d.Year <= year && d.Year >= 1750);
 
         lineGraphSvg.select(".temperature-line")
             .datum(filteredData)

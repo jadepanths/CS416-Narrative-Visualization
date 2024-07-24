@@ -11,22 +11,21 @@
 </head>
 <body>
     <h1>Global Climate Change Visualization</h1>
-    <h2>Annual Average Land Temperature by Country</h2>
+    <h2>World Map of Temperature Changes</h2>
+    <div id="main-container">
+        <div id="map-container"></div>
+    </div>
+    <div id="color-bar"></div>
+    <h2>Global Temperature Over Time</h2>
+    <div id="line-graph-container">
+        <svg id="line-graph"></svg>
+    </div>
     <div id="controls">
         <button id="prevYear">Previous Year</button>
         <input type="range" id="yearRange" min="1750" max="2013" step="1" value="1750">
         <span id="yearDisplay">1750</span>
         <button id="nextYear">Next Year</button>
         <button id="playPause">Play</button>
-    </div>
-    
-    <div id="main-container">
-        <div id="map-container"></div>
-    </div>
-    <div id="color-bar"></div>
-    <h2>Global Annual Average Land Temperature</h2>
-    <div id="line-graph-container">
-        <svg id="line-graph"></svg>
     </div>
     <div id="tooltip" class="hidden"></div>
 

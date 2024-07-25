@@ -11,15 +11,35 @@
 </head>
 <body>
     <h1>Global Climate Change Visualization</h1>
+    
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <p>
+            This visualization explores global temperature changes over time, 
+            using data from the Berkeley Earth Surface Temperature Study. 
+            The dataset includes global land and ocean temperatures starting from 1750:
+            <a href="https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data/data">
+                kaggle.com/berkeleyearth.
+            </a>
+        </p>
+    </section>
+
     <h2>World Map of Temperature Changes</h2>
     <div id="main-container">
         <div id="map-container"></div>
     </div>
     <div id="color-bar"></div>
+
     <h2>Global Temperature Over Time</h2>
     <div id="line-graph-container">
         <svg id="line-graph"></svg>
     </div>
+    
+    <section id="uncertainty">
+        <h2>Understanding Uncertainty</h2>
+        <p>The shaded area around the temperature line represents the 95% confidence interval. This accounts for measurement uncertainties due to historical changes in data collection methods and equipment.</p>
+    </section>
+
     <div id="controls">
         <button id="prevYear">Previous Year</button>
         <input type="range" id="yearRange" min="1750" max="2013" step="1" value="1750">
@@ -27,6 +47,7 @@
         <button id="nextYear">Next Year</button>
         <button id="playPause">Play</button>
     </div>
+
     <div id="tooltip" class="hidden"></div>
 
     <script src="scripts/map.js"></script>

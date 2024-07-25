@@ -13,6 +13,7 @@ body {
 
 #map-container {
     width: 70%;
+    padding-top: 20px; /* Add padding to ensure the map is not cropped */
 }
 
 #annotations {
@@ -91,6 +92,7 @@ body {
 
 #line-graph {
     width: calc(100% - 60px); /* Adjust width to account for left padding */
+    height: 400px; /* Increase height to accommodate the title */
 }
 
 .annotation {
@@ -103,4 +105,9 @@ body {
     font-size: 12px;
     font-weight: bold;
     fill: black;
+}
+
+#introduction,
+#uncertainty {
+    margin-bottom: 20px;
 }

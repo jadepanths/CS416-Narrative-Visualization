@@ -33,3 +33,16 @@ Given the wide range of temperature data from -22.616°C to 30.74475°C, we used
 
 ### Annotations and Events
 We added annotations for significant historical events (e.g., Industrial Revolution, major volcanic eruptions) to provide context to the temperature trends. These annotations help users correlate temperature changes with major events that may have influenced global climate.
+
+## Usage
+### Viewing the Visualization
+The project is hosted on GitHub Pages. You can view the live visualization here.
+
+### Running Locally
+To run the project locally, follow these steps: Just clone and open index.html!
+
+## Project Structure
++ index.html: The main HTML file that contains the structure of the web page.
++ css/styles.css: CSS file for styling the visualization.
++ scripts/map.js: JavaScript file that contains the D3.js code for creating the map and line graph visualizations.
++ data: Directory containing the data files used in the visualization.

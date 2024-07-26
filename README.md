@@ -25,24 +25,24 @@ The dataset includes some missing values for AverageTemperature and AverageTempe
 
 + We calculated yearly average temperatures by country, ignoring records with missing temperature values to avoid skewing 
   the results.
-+ For the global temperature line graph, we also calculated the yearly averages and uncertainty bounds by ignoring missing 
-  data points, ensuring a reliable representation of the overall trend.
++ For the global temperature line graph, we also calculated the yearly averages and uncertainty bounds by ignoring the 
+  missing data points, ensuring a reliable representation of the overall trend.
 
 ### Temperature Range
 Given the wide range of temperature data from -22.616°C to 30.74475°C, we used a diverging color scale from blue (cold) to red (hot) to visualize the data effectively. This choice helps users intuitively understand the temperature variations across different regions and over time.
 
 ### Annotations and Events
-We added annotations for significant historical events (e.g., Industrial Revolution, major volcanic eruptions) to provide context to the temperature trends. These annotations help users correlate temperature changes with major events that may have influenced global climate.
+We added annotations for significant historical events (e.g., the Industrial Revolution) to provide context to the temperature trends. These annotations help users correlate temperature changes with major events that may have influenced global climate.
 
 ## Usage
 ### Viewing the Visualization
 The project is hosted on GitHub Pages. You can view the live visualization here.
 
 ### Running Locally
-To run the project locally, follow these steps: Just clone and open index.html!
+To run the project locally, just clone and open index.html!
 
 ## Project Structure
-+ index.html: The main HTML file that contains the structure of the web page.
++ index.html: The main HTML file containing the web page's structure.
 + css/styles.css: CSS file for styling the visualization.
 + scripts/map.js: JavaScript file that contains the D3.js code for creating the map and line graph visualizations.
 + data: Directory containing the data files used in the visualization.
